@@ -147,8 +147,8 @@ func (v *LiveView) bindKeys() {
 		ui.KeyC:         ui.NewKeyAction("Copy", cpCmd(v.app.Flash(), v.text), true),
 		ui.KeyF:         ui.NewKeyAction("Toggle FullScreen", v.toggleFullScreenCmd, true),
 		ui.KeyR:         ui.NewKeyAction("Toggle Auto-Refresh", v.toggleRefreshCmd, true),
-		ui.KeyN:         ui.NewKeyAction("Next Match", v.nextCmd, true),
-		ui.KeyShiftN:    ui.NewKeyAction("Prev Match", v.prevCmd, true),
+		ui.KeyK:         ui.NewKeyAction("Next Match", v.nextCmd, true),
+		ui.KeyShiftK:    ui.NewKeyAction("Prev Match", v.prevCmd, true),
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", v.activateCmd, false),
 		tcell.KeyDelete: ui.NewSharedKeyAction("Erase", v.eraseCmd, false),
 	})

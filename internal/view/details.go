@@ -139,14 +139,14 @@ func (d *Details) bindKeys() {
 		tcell.KeyCtrlS:  ui.NewKeyAction("Save", d.saveCmd, false),
 		ui.KeyC:         ui.NewKeyAction("Copy", cpCmd(d.app.Flash(), d.text), true),
 		ui.KeyF:         ui.NewKeyAction("Toggle FullScreen", d.toggleFullScreenCmd, true),
-		ui.KeyN:         ui.NewKeyAction("Next Match", d.nextCmd, true),
-		ui.KeyShiftN:    ui.NewKeyAction("Prev Match", d.prevCmd, true),
+		ui.KeyK:         ui.NewKeyAction("Next Match", d.nextCmd, true),
+		ui.KeyShiftK:    ui.NewKeyAction("Prev Match", d.prevCmd, true),
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", d.activateCmd, false),
 		tcell.KeyDelete: ui.NewSharedKeyAction("Erase", d.eraseCmd, false),
 	})
 
 	if !d.searchable {
-		d.actions.Delete(ui.KeyN, ui.KeyShiftN)
+		d.actions.Delete(ui.KeyK, ui.KeyShiftK)
 	}
 }
 
