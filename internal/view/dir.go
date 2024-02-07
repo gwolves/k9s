@@ -70,7 +70,7 @@ func (d *Dir) bindDangerousKeys(aa *ui.KeyActions) {
 			Visible:   true,
 			Dangerous: true,
 		}),
-		ui.KeyE: ui.NewKeyActionWithOpts("Edit", d.editCmd, ui.ActionOpts{
+		ui.KeyShiftE: ui.NewKeyActionWithOpts("Edit", d.editCmd, ui.ActionOpts{
 			Visible:   true,
 			Dangerous: true,
 		}),
