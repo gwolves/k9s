@@ -537,7 +537,7 @@ func (b *Browser) namespaceActions(aa ui.KeyActions) {
 	if !b.meta.Namespaced || b.GetTable().Path != "" {
 		return
 	}
-	aa[ui.KeyN] = ui.NewKeyAction("Copy Namespace", b.cpNsCmd, false)
+	aa[ui.KeyShiftN] = ui.NewKeyAction("Copy Namespace", b.cpNsCmd, false)
 
 	b.namespaces = make(map[int]string, data.MaxFavoritesNS)
 	aa[ui.Key0] = ui.NewKeyAction(client.NamespaceAll, b.switchNamespaceCmd, true)
