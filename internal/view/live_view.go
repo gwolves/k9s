@@ -154,7 +154,7 @@ func (v *LiveView) bindKeys() {
 	})
 
 	if !v.app.Config.K9s.IsReadOnly() {
-		v.actions.Add(ui.KeyE, ui.NewKeyAction("Edit", v.editCmd, true))
+		v.actions.Add(ui.KeyShiftE, ui.NewKeyAction("Edit", v.editCmd, true))
 	}
 	if v.title == yamlAction {
 		v.actions.Add(ui.KeyM, ui.NewKeyAction("Toggle ManagedFields", v.toggleManagedCmd, true))

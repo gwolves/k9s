@@ -38,7 +38,7 @@ func NewWorkload(gvr client.GVR) ResourceViewer {
 
 func (w *Workload) bindDangerousKeys(aa *ui.KeyActions) {
 	aa.Bulk(ui.KeyMap{
-		ui.KeyE: ui.NewKeyActionWithOpts("Edit", w.editCmd,
+		ui.KeyShiftE: ui.NewKeyActionWithOpts("Edit", w.editCmd,
 			ui.ActionOpts{
 				Visible:   true,
 				Dangerous: true,

@@ -539,7 +539,7 @@ func (b *Browser) refreshActions() {
 		b.namespaceActions(aa)
 		if !b.app.Config.K9s.IsReadOnly() {
 			if client.Can(b.meta.Verbs, "edit") {
-				aa.Add(ui.KeyE, ui.NewKeyActionWithOpts("Edit", b.editCmd,
+				aa.Add(ui.KeyShiftE, ui.NewKeyActionWithOpts("Edit", b.editCmd,
 					ui.ActionOpts{
 						Visible:   true,
 						Dangerous: true,
