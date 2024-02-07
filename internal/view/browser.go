@@ -580,7 +580,7 @@ func (b *Browser) refreshActions() {
 
 func (b *Browser) selectPrevious(evt *tcell.EventKey) *tcell.EventKey {
 	r := b.GetSelectedRowIndex()
-	if r > 0 {
+	if r > 1 {
 		b.SelectRow(r-1, 0, false)
 	}
 	return evt
