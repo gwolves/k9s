@@ -155,7 +155,7 @@ func (p *Prompt) keyboard(evt *tcell.EventKey) *tcell.EventKey {
 	case tcell.KeyRune:
 		p.model.Add(evt.Rune())
 
-	case tcell.KeyEscape:
+	case tcell.KeyEscape, KeyQ:
 		p.model.ClearText(true)
 		p.model.SetActive(false)
 
