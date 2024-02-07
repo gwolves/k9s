@@ -89,6 +89,7 @@ func cowTalk(says string, w int) string {
 
 func (c *Cow) bindKeys() {
 	c.actions.Add(tcell.KeyEscape, ui.NewKeyAction("Back", c.resetCmd, false))
+	c.actions.Add(ui.KeyQ, ui.NewKeyAction("Back", c.resetCmd, false))
 }
 
 func (c *Cow) keyboard(evt *tcell.EventKey) *tcell.EventKey {

@@ -79,6 +79,7 @@ func (h *Help) bindKeys() {
 	h.Actions().Delete(ui.KeySpace, tcell.KeyCtrlSpace, tcell.KeyCtrlS, ui.KeySlash)
 	h.Actions().Bulk(ui.KeyMap{
 		tcell.KeyEscape: ui.NewKeyAction("Back", h.app.PrevCmd, true),
+		ui.KeyQ:         ui.NewKeyAction("Back", h.app.PrevCmd, true),
 		ui.KeyHelp:      ui.NewKeyAction("Back", h.app.PrevCmd, false),
 		tcell.KeyEnter:  ui.NewKeyAction("Back", h.app.PrevCmd, false),
 	})
