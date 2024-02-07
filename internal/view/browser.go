@@ -519,6 +519,8 @@ func (b *Browser) refreshActions() {
 	for _, f := range b.bindKeysFn {
 		f(aa)
 	}
+	aa[ui.KeyN] = ui.NewKeyAction("Down", b.selectNext, false)
+	aa[ui.KeyE] = ui.NewKeyAction("Up", b.selectPrevious, false)
 	b.Actions().Add(aa)
 
 	if err := pluginActions(b, b.Actions()); err != nil {
@@ -531,6 +533,22 @@ func (b *Browser) refreshActions() {
 	}
 
 	b.app.Menu().HydrateMenu(b.Hints())
+}
+
+func (b *Browser) selectPrevious(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r > 0 {
+		b.SelectRow(r-1, 0, false)
+	}
+	return evt
+}
+
+func (b *Browser) selectNext(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r < b.GetRowCount()-1 {
+		b.SelectRow(r+1, 0, false)
+	}
+	return evt
 }
 
 func (b *Browser) namespaceActions(aa ui.KeyActions) {
