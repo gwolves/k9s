@@ -254,17 +254,46 @@ func (l *Log) bindKeys() {
 		tcell.KeyEscape: ui.NewKeyAction("Back", l.resetCmd, false),
 		ui.KeyQ:         ui.NewKeyAction("Back", l.resetCmd, false),
 		ui.KeyShiftC:    ui.NewKeyAction("Clear", l.clearCmd, true),
-		ui.KeyM:         ui.NewKeyAction("Mark", l.markCmd, true),
+		ui.KeyShiftM:    ui.NewKeyAction("Mark", l.markCmd, true),
 		ui.KeyS:         ui.NewKeyAction("Toggle AutoScroll", l.toggleAutoScrollCmd, true),
 		ui.KeyF:         ui.NewKeyAction("Toggle FullScreen", l.toggleFullScreenCmd, true),
 		ui.KeyT:         ui.NewKeyAction("Toggle Timestamp", l.toggleTimestampCmd, true),
 		ui.KeyW:         ui.NewKeyAction("Toggle Wrap", l.toggleTextWrapCmd, true),
 		tcell.KeyCtrlS:  ui.NewKeyAction("Save", l.SaveCmd, true),
 		ui.KeyC:         ui.NewKeyAction("Copy", cpCmd(l.app.Flash(), l.logs.TextView), true),
+
+		ui.KeyM: ui.NewKeyAction("Left", l.moveLeft, false),
+		ui.KeyN: ui.NewKeyAction("Down", l.moveDown, false),
+		ui.KeyE: ui.NewKeyAction("Up", l.moveUp, false),
+		ui.KeyI: ui.NewKeyAction("Right", l.moveRight, false),
 	})
 	if l.model.HasDefaultContainer() {
 		l.logs.Actions().Add(ui.KeyA, ui.NewKeyAction("Toggle AllContainers", l.toggleAllContainers, true))
 	}
+}
+
+func (l *Log) moveLeft(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := l.logs.GetScrollOffset()
+	l.logs.ScrollTo(r, c-1)
+	return evt
+}
+
+func (l *Log) moveRight(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := l.logs.GetScrollOffset()
+	l.logs.ScrollTo(r, c+1)
+	return evt
+}
+
+func (l *Log) moveDown(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := l.logs.GetScrollOffset()
+	l.logs.ScrollTo(r+1, c)
+	return evt
+}
+
+func (l *Log) moveUp(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := l.logs.GetScrollOffset()
+	l.logs.ScrollTo(r-1, c)
+	return evt
 }
 
 func (l *Log) resetCmd(evt *tcell.EventKey) *tcell.EventKey {

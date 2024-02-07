@@ -563,6 +563,8 @@ func (b *Browser) refreshActions() {
 	for _, f := range b.bindKeysFn {
 		f(aa)
 	}
+		aa.Add(ui.KeyN, ui.NewKeyAction("Down", b.selectNext, false)
+		aa.Add(ui.KeyE, ui.NewKeyAction("Up", b.selectPrevious, false)
 	b.Actions().Merge(aa)
 
 	if err := pluginActions(b, b.Actions()); err != nil {
@@ -574,6 +576,22 @@ func (b *Browser) refreshActions() {
 		b.app.Logo().Warn("HotKeys load failed!")
 	}
 	b.app.Menu().HydrateMenu(b.Hints())
+}
+
+func (b *Browser) selectPrevious(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r > 0 {
+		b.SelectRow(r-1, 0, false)
+	}
+	return evt
+}
+
+func (b *Browser) selectNext(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r < b.GetRowCount()-1 {
+		b.SelectRow(r+1, 0, false)
+	}
+	return evt
 }
 
 func (b *Browser) namespaceActions(aa *ui.KeyActions) {

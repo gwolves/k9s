@@ -151,6 +151,11 @@ func (v *LiveView) bindKeys() {
 		ui.KeyShiftK:    ui.NewKeyAction("Prev Match", v.prevCmd, true),
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", v.activateCmd, false),
 		tcell.KeyDelete: ui.NewSharedKeyAction("Erase", v.eraseCmd, false),
+
+		ui.KeyM: ui.NewKeyAction("Left", v.moveLeft, false),
+		ui.KeyN: ui.NewKeyAction("Down", v.moveDown, false),
+		ui.KeyE: ui.NewKeyAction("Up", v.moveUp, false),
+		ui.KeyI: ui.NewKeyAction("Right", v.moveRight, false),
 	})
 
 	if !v.app.Config.K9s.IsReadOnly() {
@@ -162,6 +167,30 @@ func (v *LiveView) bindKeys() {
 	if v.model != nil && v.model.GVR().IsDecodable() {
 		v.actions.Add(ui.KeyX, ui.NewKeyAction("Toggle Decode", v.toggleEncodedDecodedCmd, true))
 	}
+}
+
+func (v *LiveView) moveLeft(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r, c-1)
+	return evt
+}
+
+func (v *LiveView) moveRight(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r, c+1)
+	return evt
+}
+
+func (v *LiveView) moveDown(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r+1, c)
+	return evt
+}
+
+func (v *LiveView) moveUp(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r-1, c)
+	return evt
 }
 
 func (v *LiveView) toggleEncodedDecodedCmd(evt *tcell.EventKey) *tcell.EventKey {
