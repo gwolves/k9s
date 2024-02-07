@@ -163,7 +163,7 @@ func (x *Xray) refreshActions() {
 	}
 
 	if client.Can(x.meta.Verbs, "edit") {
-		aa[ui.KeyE] = ui.NewKeyAction("Edit", x.editCmd, true)
+		aa[ui.KeyShiftE] = ui.NewKeyAction("Edit", x.editCmd, true)
 	}
 	if client.Can(x.meta.Verbs, "delete") {
 		aa[tcell.KeyCtrlD] = ui.NewKeyAction("Delete", x.deleteCmd, true)

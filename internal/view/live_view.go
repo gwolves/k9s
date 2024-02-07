@@ -155,7 +155,7 @@ func (v *LiveView) bindKeys() {
 
 	if !v.app.Config.K9s.IsReadOnly() {
 		v.actions.Add(ui.KeyActions{
-			ui.KeyE: ui.NewKeyAction("Edit", v.editCmd, true),
+			ui.KeyShiftE: ui.NewKeyAction("Edit", v.editCmd, true),
 		})
 	}
 	if v.title == yamlAction {
