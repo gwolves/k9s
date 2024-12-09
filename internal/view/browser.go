@@ -546,7 +546,7 @@ func (b *Browser) refreshActions() {
 					}))
 			}
 			if client.Can(b.meta.Verbs, "delete") {
-				aa.Add(tcell.KeyCtrlD, ui.NewKeyActionWithOpts("Delete", b.deleteCmd,
+				aa.Add(ui.KeyShiftD, ui.NewKeyActionWithOpts("Delete", b.deleteCmd,
 					ui.ActionOpts{
 						Visible:   true,
 						Dangerous: true,
@@ -563,8 +563,8 @@ func (b *Browser) refreshActions() {
 	for _, f := range b.bindKeysFn {
 		f(aa)
 	}
-		aa.Add(ui.KeyN, ui.NewKeyAction("Down", b.selectNext, false)
-		aa.Add(ui.KeyE, ui.NewKeyAction("Up", b.selectPrevious, false)
+	aa.Add(ui.KeyN, ui.NewKeyAction("Down", b.selectNext, false))
+	aa.Add(ui.KeyE, ui.NewKeyAction("Up", b.selectPrevious, false))
 	b.Actions().Merge(aa)
 
 	if err := pluginActions(b, b.Actions()); err != nil {

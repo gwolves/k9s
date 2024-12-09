@@ -6,7 +6,6 @@ package view
 import (
 	"github.com/derailed/k9s/internal/client"
 	"github.com/derailed/k9s/internal/ui"
-	"github.com/derailed/tcell/v2"
 )
 
 // Event represents a command alias view.
@@ -26,7 +25,7 @@ func NewEvent(gvr client.GVR) ResourceViewer {
 }
 
 func (e *Event) bindKeys(aa *ui.KeyActions) {
-	aa.Delete(tcell.KeyCtrlD, ui.KeyShiftE, ui.KeyA)
+	aa.Delete(ui.KeyShiftD, ui.KeyShiftE, ui.KeyA)
 	aa.Bulk(ui.KeyMap{
 		ui.KeyShiftL: ui.NewKeyAction("Sort LastSeen", e.GetTable().SortColCmd("LAST SEEN", false), false),
 		ui.KeyShiftF: ui.NewKeyAction("Sort FirstSeen", e.GetTable().SortColCmd("FIRST SEEN", false), false),
