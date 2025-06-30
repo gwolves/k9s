@@ -125,6 +125,7 @@ func (x *Xray) bindKeys() {
 	x.Actions().Bulk(ui.KeyMap{
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", x.activateCmd, false),
 		tcell.KeyEscape: ui.NewSharedKeyAction("Filter Reset", x.resetCmd, false),
+		ui.KeyQ:         ui.NewSharedKeyAction("Filter Reset", x.resetCmd, false),
 		tcell.KeyEnter:  ui.NewKeyAction("Goto", x.gotoCmd, true),
 	})
 }
@@ -170,10 +171,10 @@ func (x *Xray) refreshActions() {
 	}
 
 	if client.Can(x.meta.Verbs, "edit") {
-		aa.Add(ui.KeyE, ui.NewKeyAction("Edit", x.editCmd, true))
+		aa.Add(ui.KeyShiftE, ui.NewKeyAction("Edit", x.editCmd, true))
 	}
 	if client.Can(x.meta.Verbs, "delete") {
-		aa.Add(tcell.KeyCtrlD, ui.NewKeyAction("Delete", x.deleteCmd, true))
+		aa.Add(ui.KeyShiftD, ui.NewKeyAction("Delete", x.deleteCmd, true))
 	}
 	if !dao.IsK9sMeta(x.meta) {
 		aa.Bulk(ui.KeyMap{

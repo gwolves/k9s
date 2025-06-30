@@ -10,16 +10,17 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/derailed/tcell/v2"
+	"github.com/derailed/tview"
+	"github.com/sahilm/fuzzy"
+	"k8s.io/apimachinery/pkg/labels"
+
 	"github.com/derailed/k9s/internal"
 	"github.com/derailed/k9s/internal/config"
 	"github.com/derailed/k9s/internal/model"
 	"github.com/derailed/k9s/internal/slogs"
 	"github.com/derailed/k9s/internal/ui"
 	"github.com/derailed/k9s/internal/view/cmd"
-	"github.com/derailed/tcell/v2"
-	"github.com/derailed/tview"
-	"github.com/sahilm/fuzzy"
-	"k8s.io/apimachinery/pkg/labels"
 )
 
 const (
@@ -146,25 +147,55 @@ func (v *LiveView) bindKeys() {
 	v.actions.Bulk(ui.KeyMap{
 		tcell.KeyEnter:  ui.NewSharedKeyAction("Filter", v.filterCmd, false),
 		tcell.KeyEscape: ui.NewKeyAction("Back", v.resetCmd, false),
+		ui.KeyQ:         ui.NewKeyAction("Back", v.resetCmd, false),
 		tcell.KeyCtrlS:  ui.NewKeyAction("Save", v.saveCmd, false),
 		ui.KeyC:         ui.NewKeyAction("Copy", cpCmd(v.app.Flash(), v.text), true),
 		ui.KeyF:         ui.NewKeyAction("Toggle FullScreen", v.toggleFullScreenCmd, true),
 		ui.KeyR:         ui.NewKeyAction("Toggle Auto-Refresh", v.toggleRefreshCmd, true),
-		ui.KeyN:         ui.NewKeyAction("Next Match", v.nextCmd, true),
-		ui.KeyShiftN:    ui.NewKeyAction("Prev Match", v.prevCmd, true),
+		ui.KeyK:         ui.NewKeyAction("Next Match", v.nextCmd, true),
+		ui.KeyShiftK:    ui.NewKeyAction("Prev Match", v.prevCmd, true),
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", v.activateCmd, false),
 		tcell.KeyDelete: ui.NewSharedKeyAction("Erase", v.eraseCmd, false),
+
+		ui.KeyM: ui.NewKeyAction("Left", v.moveLeft, false),
+		ui.KeyN: ui.NewKeyAction("Down", v.moveDown, false),
+		ui.KeyE: ui.NewKeyAction("Up", v.moveUp, false),
+		ui.KeyI: ui.NewKeyAction("Right", v.moveRight, false),
 	})
 
 	if !v.app.Config.IsReadOnly() {
-		v.actions.Add(ui.KeyE, ui.NewKeyAction("Edit", v.editCmd, true))
+		v.actions.Add(ui.KeyShiftE, ui.NewKeyAction("Edit", v.editCmd, true))
 	}
 	if v.title == yamlAction {
-		v.actions.Add(ui.KeyM, ui.NewKeyAction("Toggle ManagedFields", v.toggleManagedCmd, true))
+		v.actions.Add(ui.KeyShiftM, ui.NewKeyAction("Toggle ManagedFields", v.toggleManagedCmd, true))
 	}
 	if v.model != nil && v.model.GVR().IsDecodable() {
 		v.actions.Add(ui.KeyX, ui.NewKeyAction("Toggle Decode", v.toggleEncodedDecodedCmd, true))
 	}
+}
+
+func (v *LiveView) moveLeft(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r, c-1)
+	return evt
+}
+
+func (v *LiveView) moveRight(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r, c+1)
+	return evt
+}
+
+func (v *LiveView) moveDown(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r+1, c)
+	return evt
+}
+
+func (v *LiveView) moveUp(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := v.text.GetScrollOffset()
+	v.text.ScrollTo(r-1, c)
+	return evt
 }
 
 func (v *LiveView) toggleEncodedDecodedCmd(evt *tcell.EventKey) *tcell.EventKey {

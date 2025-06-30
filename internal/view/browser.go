@@ -149,6 +149,7 @@ func (b *Browser) suggestFilter() model.SuggestionFunc {
 func (b *Browser) bindKeys(aa *ui.KeyActions) {
 	aa.Bulk(ui.KeyMap{
 		tcell.KeyEscape: ui.NewSharedKeyAction("Filter Reset", b.resetCmd, false),
+		ui.KeyQ:         ui.NewSharedKeyAction("Filter Reset", b.resetCmd, false),
 		tcell.KeyEnter:  ui.NewSharedKeyAction("Filter", b.filterCmd, false),
 		tcell.KeyHelp:   ui.NewSharedKeyAction("Help", b.helpCmd, false),
 	})
@@ -584,14 +585,14 @@ func (b *Browser) refreshActions() {
 		b.namespaceActions(aa)
 		if !b.app.Config.IsReadOnly() {
 			if client.Can(b.meta.Verbs, "edit") {
-				aa.Add(ui.KeyE, ui.NewKeyActionWithOpts("Edit", b.editCmd,
+				aa.Add(ui.KeyShiftE, ui.NewKeyActionWithOpts("Edit", b.editCmd,
 					ui.ActionOpts{
 						Visible:   true,
 						Dangerous: true,
 					}))
 			}
 			if client.Can(b.meta.Verbs, "delete") {
-				aa.Add(tcell.KeyCtrlD, ui.NewKeyActionWithOpts("Delete", b.deleteCmd,
+				aa.Add(ui.KeyShiftD, ui.NewKeyActionWithOpts("Delete", b.deleteCmd,
 					ui.ActionOpts{
 						Visible:   true,
 						Dangerous: true,
@@ -608,6 +609,8 @@ func (b *Browser) refreshActions() {
 	for _, f := range b.bindKeysFn {
 		f(aa)
 	}
+	aa.Add(ui.KeyN, ui.NewKeyAction("Down", b.selectNext, false))
+	aa.Add(ui.KeyE, ui.NewKeyAction("Up", b.selectPrevious, false))
 	b.Actions().Merge(aa)
 
 	if err := pluginActions(b, b.Actions()); err != nil {
@@ -621,11 +624,27 @@ func (b *Browser) refreshActions() {
 	b.app.Menu().HydrateMenu(b.Hints())
 }
 
+func (b *Browser) selectPrevious(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r > 1 {
+		b.SelectRow(r-1, 0, false)
+	}
+	return evt
+}
+
+func (b *Browser) selectNext(evt *tcell.EventKey) *tcell.EventKey {
+	r := b.GetSelectedRowIndex()
+	if r < b.GetRowCount()-1 {
+		b.SelectRow(r+1, 0, false)
+	}
+	return evt
+}
+
 func (b *Browser) namespaceActions(aa *ui.KeyActions) {
 	if !b.meta.Namespaced || b.GetTable().Path != "" {
 		return
 	}
-	aa.Add(ui.KeyN, ui.NewKeyAction("Copy Namespace", b.cpNsCmd, false))
+	aa.Add(ui.KeyShiftN, ui.NewKeyAction("Copy Namespace", b.cpNsCmd, false))
 
 	b.namespaces = make(map[int]string, data.MaxFavoritesNS)
 	aa.Add(ui.Key0, ui.NewKeyAction(client.NamespaceAll, b.switchNamespaceCmd, true))

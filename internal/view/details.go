@@ -138,18 +138,48 @@ func (d *Details) bindKeys() {
 	d.actions.Bulk(ui.KeyMap{
 		tcell.KeyEnter:  ui.NewSharedKeyAction("Filter", d.filterCmd, false),
 		tcell.KeyEscape: ui.NewKeyAction("Back", d.resetCmd, false),
+		ui.KeyQ:         ui.NewKeyAction("Back", d.resetCmd, false),
 		tcell.KeyCtrlS:  ui.NewKeyAction("Save", d.saveCmd, false),
 		ui.KeyC:         ui.NewKeyAction("Copy", cpCmd(d.app.Flash(), d.text), true),
 		ui.KeyF:         ui.NewKeyAction("Toggle FullScreen", d.toggleFullScreenCmd, true),
-		ui.KeyN:         ui.NewKeyAction("Next Match", d.nextCmd, true),
-		ui.KeyShiftN:    ui.NewKeyAction("Prev Match", d.prevCmd, true),
+		ui.KeyK:         ui.NewKeyAction("Next Match", d.nextCmd, true),
+		ui.KeyShiftK:    ui.NewKeyAction("Prev Match", d.prevCmd, true),
 		ui.KeySlash:     ui.NewSharedKeyAction("Filter Mode", d.activateCmd, false),
 		tcell.KeyDelete: ui.NewSharedKeyAction("Erase", d.eraseCmd, false),
+
+		ui.KeyM: ui.NewKeyAction("Left", d.moveLeft, false),
+		ui.KeyN: ui.NewKeyAction("Down", d.moveDown, false),
+		ui.KeyE: ui.NewKeyAction("Up", d.moveUp, false),
+		ui.KeyI: ui.NewKeyAction("Right", d.moveRight, false),
 	})
 
 	if !d.searchable {
-		d.actions.Delete(ui.KeyN, ui.KeyShiftN)
+		d.actions.Delete(ui.KeyK, ui.KeyShiftK)
 	}
+}
+
+func (d *Details) moveLeft(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := d.text.GetScrollOffset()
+	d.text.ScrollTo(r, c-1)
+	return evt
+}
+
+func (d *Details) moveRight(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := d.text.GetScrollOffset()
+	d.text.ScrollTo(r, c+1)
+	return evt
+}
+
+func (d *Details) moveDown(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := d.text.GetScrollOffset()
+	d.text.ScrollTo(r+1, c)
+	return evt
+}
+
+func (d *Details) moveUp(evt *tcell.EventKey) *tcell.EventKey {
+	r, c := d.text.GetScrollOffset()
+	d.text.ScrollTo(r-1, c)
+	return evt
 }
 
 func (d *Details) keyboard(evt *tcell.EventKey) *tcell.EventKey {
